@@ -25,6 +25,10 @@
 		B71B13143024876400C93894 /* QuizViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71B13153024876400C93895 /* QuizViewModel.swift */; };
 		B71B13163024876400C93896 /* QuizQuestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71B13173024876400C93897 /* QuizQuestion.swift */; };
 		B71B13183024876400C93898 /* QuizQuestionGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71B13193024876400C93899 /* QuizQuestionGenerator.swift */; };
+		B71B131A3024876400C9389A /* AuthModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71B131B3024876400C9389B /* AuthModels.swift */; };
+		B71B131C3024876400C9389C /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71B131D3024876400C9389D /* KeychainService.swift */; };
+		B71B131E3024876400C9389E /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71B131F3024876400C9389F /* AuthService.swift */; };
+		B71B13203024876400C938A0 /* AICommerceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71B13213024876400C938A1 /* AICommerceService.swift */; };
 		B71B123B3024875300C93869 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B71B123A3024875300C93869 /* Assets.xcassets */; };
 		B71B123F3024875300C93869 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B71B123E3024875300C93869 /* Preview Assets.xcassets */; };
 		B71B12493024875400C93869 /* JapaneseAnalysisTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71B12483024875400C93869 /* JapaneseAnalysisTests.swift */; };
@@ -69,6 +73,10 @@
 		B71B13153024876400C93895 /* QuizViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizViewModel.swift; sourceTree = "<group>"; };
 		B71B13173024876400C93897 /* QuizQuestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizQuestion.swift; sourceTree = "<group>"; };
 		B71B13193024876400C93899 /* QuizQuestionGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizQuestionGenerator.swift; sourceTree = "<group>"; };
+		B71B131B3024876400C9389B /* AuthModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthModels.swift; sourceTree = "<group>"; };
+		B71B131D3024876400C9389D /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
+		B71B131F3024876400C9389F /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		B71B13213024876400C938A1 /* AICommerceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AICommerceService.swift; sourceTree = "<group>"; };
 		B71B123A3024875300C93869 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B71B123C3024875300C93869 /* JapaneseAnalysis.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = JapaneseAnalysis.entitlements; sourceTree = "<group>"; };
 		B71B123E3024875300C93869 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -168,6 +176,7 @@
 				B71B13053024876400C93885 /* GrammarPoint.swift */,
 				B71B13073024876400C93887 /* SentenceAnalysis.swift */,
 				B71B13173024876400C93897 /* QuizQuestion.swift */,
+				B71B131B3024876400C9389B /* AuthModels.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -181,6 +190,9 @@
 				B71B130F3024876400C9388F /* GrammarDataN3.swift */,
 				B71B13113024876400C93891 /* GrammarDataN4N5.swift */,
 				B71B13193024876400C93899 /* QuizQuestionGenerator.swift */,
+				B71B131D3024876400C9389D /* KeychainService.swift */,
+				B71B131F3024876400C9389F /* AuthService.swift */,
+				B71B13213024876400C938A1 /* AICommerceService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -364,6 +376,10 @@
 				B71B13143024876400C93894 /* QuizViewModel.swift in Sources */,
 				B71B13163024876400C93896 /* QuizQuestion.swift in Sources */,
 				B71B13183024876400C93898 /* QuizQuestionGenerator.swift in Sources */,
+				B71B131A3024876400C9389A /* AuthModels.swift in Sources */,
+				B71B131C3024876400C9389C /* KeychainService.swift in Sources */,
+				B71B131E3024876400C9389E /* AuthService.swift in Sources */,
+				B71B13203024876400C938A0 /* AICommerceService.swift in Sources */,
 				B71B12373024875000C93869 /* JapaneseAnalysisApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

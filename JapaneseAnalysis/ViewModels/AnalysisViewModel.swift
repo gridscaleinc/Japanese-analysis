@@ -46,12 +46,26 @@ final class AnalysisViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
 
-        // 模拟延迟，让 UI 有反馈感
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            guard let self else { return }
+        // 优先调用 AI 实时分析，失败时回退到本地规则解析
+        Task { @MainActor in
+            do {
+                // 先尝试 AI 分析
+                let aiResult = try await AICommerceService.shared.analyzeSentence(trimmed)
+                self.analysis = aiResult
+            } catch {
+                // AI 调用失败（未登录/网络/余额不足），回退到本地解析
+                let result = SentenceParserService.analyze(trimmed)
+                self.analysis = result
 
-            let result = SentenceParserService.analyze(trimmed)
-            self.analysis = result
+                // 显示 AI 不可用的提示
+                if let err = error as? AICommerceError, err == .notAuthenticated {
+                    self.errorMessage = "未登录，使用本地基础解析（登录后可使用 AI 智能解析）"
+                } else if let err = error as? AICommerceError, err == .insufficientCredits {
+                    self.errorMessage = "余额不足，使用本地基础解析（充值后可使用 AI 智能解析）"
+                } else {
+                    self.errorMessage = "AI 解析不可用，已切换到本地解析"
+                }
+            }
             self.isLoading = false
         }
     }

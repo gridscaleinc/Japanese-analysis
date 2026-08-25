@@ -35,6 +35,8 @@ final class QuizViewModel: ObservableObject {
     @Published var correctCount = 0
     @Published var isAnswered = false
     @Published var answerRecords: [QuizAnswerRecord] = []
+    @Published var isLoadingQuestions = false
+    @Published var loadError: String?
 
     // MARK: - 计算属性
 
@@ -55,16 +57,36 @@ final class QuizViewModel: ObservableObject {
 
     // MARK: - 动作
 
-    /// 开始新挑战
+    /// 开始新挑战（AI 动态出题）
     func startChallenge() {
-        questions = QuizQuestionGenerator.generateDailyChallenge()
-        currentIndex = 0
-        selectedIndex = nil
-        answeredCount = 0
-        correctCount = 0
-        isAnswered = false
-        answerRecords = []
-        phase = .answering
+        isLoadingQuestions = true
+        loadError = nil
+
+        Task {
+            do {
+                let generated = try await AICommerceService.shared.generateQuizQuestions(count: 5)
+                questions = generated
+                currentIndex = 0
+                selectedIndex = nil
+                answeredCount = 0
+                correctCount = 0
+                isAnswered = false
+                answerRecords = []
+                phase = .answering
+            } catch {
+                // 失败时回退到内置题库
+                questions = QuizQuestionGenerator.generateDailyChallenge()
+                currentIndex = 0
+                selectedIndex = nil
+                answeredCount = 0
+                correctCount = 0
+                isAnswered = false
+                answerRecords = []
+                loadError = error.localizedDescription
+                phase = .answering
+            }
+            isLoadingQuestions = false
+        }
     }
 
     /// 选择选项

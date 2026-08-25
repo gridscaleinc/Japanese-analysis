@@ -73,17 +73,33 @@ struct QuizView: View {
                 .background(.background.secondary)
                 .clipShape(RoundedRectangle(cornerRadius: 16))
 
+                if let loadError = viewModel.loadError {
+                    Label(loadError, systemImage: "exclamationmark.triangle.fill")
+                        .font(.caption)
+                        .foregroundStyle(.orange)
+                        .padding(.horizontal)
+                }
+
                 Button {
                     viewModel.startChallenge()
                 } label: {
-                    Text("开始挑战")
-                        .font(.headline)
-                        .foregroundStyle(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 14)
-                        .background(.teal)
-                        .clipShape(RoundedRectangle(cornerRadius: 14))
+                    HStack {
+                        if viewModel.isLoadingQuestions {
+                            ProgressView()
+                                .tint(.white)
+                            Text("AI 出题中…")
+                        } else {
+                            Text("开始挑战")
+                        }
+                    }
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+                    .background(.teal)
+                    .clipShape(RoundedRectangle(cornerRadius: 14))
                 }
+                .disabled(viewModel.isLoadingQuestions)
                 .padding(.top, 8)
 
                 Spacer(minLength: 20)
