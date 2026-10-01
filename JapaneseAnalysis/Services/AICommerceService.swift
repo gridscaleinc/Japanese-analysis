@@ -15,6 +15,9 @@ final class AICommerceService {
     static let shared = AICommerceService()
     private init() {}
 
+    /// 带超时配置的网络会话（超时/重试策略来自 AIServiceConfig）
+    private let session = AIServiceConfig.makeSession()
+
     // MARK: - 动态出题
 
     /// 让 AI 生成每日挑战题目（JSON 数组）
@@ -28,7 +31,7 @@ final class AICommerceService {
         // 调用原生 OpenAI 兼容端点
         let responseJSON = try await chatCompletion(
             token: token,
-            model: "deepseek-chat",
+            model: AIServiceConfig.defaultModel,
             messages: ["role": "user", "content": prompt]
         )
 
@@ -57,7 +60,7 @@ final class AICommerceService {
         // 调用原生 OpenAI 兼容端点
         let responseJSON = try await chatCompletion(
             token: token,
-            model: "deepseek-chat",
+            model: AIServiceConfig.defaultModel,
             messages: ["role": "user", "content": prompt]
         )
 
@@ -209,18 +212,18 @@ final class AICommerceService {
     func fetchWalletBalance() async throws -> Int {
         let token = try await AuthService.shared.ensureValidAIToken()
 
-        let url = AICommerceConfig.aicommerceBaseURL.appendingPathComponent("v1/wallet")
+        let url = AICommerceConfig.aicommerceBaseURL.appendingPathComponent(AIServiceConfig.walletPath)
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer \(token)", forHTTPHeaderField: AIServiceConfig.Header.authorization)
 
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
+            let (data, response) = try await session.data(for: request)
             if let http = response as? HTTPURLResponse, http.statusCode == 401 {
                 try await AuthService.shared.resetAIToken()
                 let token2 = try await AuthService.shared.ensureValidAIToken()
-                request.setValue("Bearer \(token2)", forHTTPHeaderField: "Authorization")
-                let (data2, response2) = try await URLSession.shared.data(for: request)
+                request.setValue("Bearer \(token2)", forHTTPHeaderField: AIServiceConfig.Header.authorization)
+                let (data2, response2) = try await session.data(for: request)
                 if let http2 = response2 as? HTTPURLResponse, http2.statusCode == 200 {
                     return try parseBalance(from: data2)
                 }
@@ -247,32 +250,32 @@ final class AICommerceService {
     /// POST {AICOMMERCE_BASE_URL}/v1/ai/native/deepseek/v1/chat/completions
     private func chatCompletion(token: String, model: String, messages: [String: String], attempt: Int = 0) async throws -> [String: Any] {
         let baseURL = AICommerceConfig.aicommerceBaseURL
-        let url = baseURL.appendingPathComponent("v1/ai/native/deepseek/v1/chat/completions")
+        let url = baseURL.appendingPathComponent(AIServiceConfig.chatCompletionsPath)
 
         // 生成每次调用的 X-Client-Request-ID（用于显式 Cancel）
-        let clientRequestID = "crq_\(UUID().uuidString)"
+        let clientRequestID = AIServiceConfig.makeClientRequestID()
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: AIServiceConfig.Header.contentType)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: AIServiceConfig.Header.authorization)
 
         // 产品上下文头
-        request.setValue(AICommerceConfig.appCode, forHTTPHeaderField: "x-aicommerce-app-code")
-        request.setValue(AICommerceConfig.productCode, forHTTPHeaderField: "x-aicommerce-product-code")
-        request.setValue("standard", forHTTPHeaderField: "x-aicommerce-billing-mode")
-        request.setValue(clientRequestID, forHTTPHeaderField: "X-Client-Request-ID")
+        request.setValue(AICommerceConfig.appCode, forHTTPHeaderField: AIServiceConfig.Header.appCode)
+        request.setValue(AICommerceConfig.productCode, forHTTPHeaderField: AIServiceConfig.Header.productCode)
+        request.setValue(AIServiceConfig.defaultBillingMode.rawValue, forHTTPHeaderField: AIServiceConfig.Header.billingMode)
+        request.setValue(clientRequestID, forHTTPHeaderField: AIServiceConfig.Header.clientRequestID)
 
         let body: [String: Any] = [
             "model": model,
             "messages": [messages],
-            "temperature": 0.7,
-            "max_tokens": 2000
+            "temperature": AIServiceConfig.defaultTemperature,
+            "max_tokens": AIServiceConfig.defaultMaxTokens
         ]
         request.httpBody = try JSONSerialization.data(withJSONObject: body)
 
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
+            let (data, response) = try await session.data(for: request)
             guard let http = response as? HTTPURLResponse else {
                 throw AICommerceError.invalidResponse
             }
@@ -284,8 +287,8 @@ final class AICommerceService {
                 }
                 return json
             case 401:
-                // token 失效 → 重置并重试（只重试一次，防止无限递归）
-                guard attempt < 1 else {
+                // token 失效 → 重置并重试（重试次数来自 AIServiceConfig，防止无限递归）
+                guard attempt < AIServiceConfig.maxAuthRetries else {
                     throw AICommerceError.notAuthenticated
                 }
                 try await AuthService.shared.resetAIToken()
@@ -316,12 +319,13 @@ final class AICommerceService {
 
         let baseURL = AICommerceConfig.aicommerceBaseURL
         let encodedID = clientRequestID.addingPercentEncoding(withAllowedCharacters: .alphanumerics) ?? clientRequestID
-        let url = baseURL.appendingPathComponent("v1/ai/client-requests/\(encodedID)/cancel")
+        let path = String(format: AIServiceConfig.cancelRequestPathTemplate, encodedID)
+        let url = baseURL.appendingPathComponent(path)
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: AIServiceConfig.Header.contentType)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: AIServiceConfig.Header.authorization)
 
         let body: [String: Any] = [
             "app_code": AICommerceConfig.appCode,

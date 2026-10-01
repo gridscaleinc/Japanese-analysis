@@ -29,6 +29,7 @@
 		B71B131C3024876400C9389C /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71B131D3024876400C9389D /* KeychainService.swift */; };
 		B71B131E3024876400C9389E /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71B131F3024876400C9389F /* AuthService.swift */; };
 		B71B13203024876400C938A0 /* AICommerceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71B13213024876400C938A1 /* AICommerceService.swift */; };
+		B71B13223024876400C938A2 /* AIServiceConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71B13233024876400C938A3 /* AIServiceConfig.swift */; };
 		B71B123B3024875300C93869 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B71B123A3024875300C93869 /* Assets.xcassets */; };
 		B71B123F3024875300C93869 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B71B123E3024875300C93869 /* Preview Assets.xcassets */; };
 		B71B12493024875400C93869 /* JapaneseAnalysisTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71B12483024875400C93869 /* JapaneseAnalysisTests.swift */; };
@@ -77,6 +78,8 @@
 		B71B131D3024876400C9389D /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
 		B71B131F3024876400C9389F /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		B71B13213024876400C938A1 /* AICommerceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AICommerceService.swift; sourceTree = "<group>"; };
+		B71B13233024876400C938A3 /* AIServiceConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIServiceConfig.swift; sourceTree = "<group>"; };
+		B71B13243024876400C938A4 /* AIConfig.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = AIConfig.xcconfig; sourceTree = "<group>"; };
 		B71B123A3024875300C93869 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B71B123C3024875300C93869 /* JapaneseAnalysis.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = JapaneseAnalysis.entitlements; sourceTree = "<group>"; };
 		B71B123E3024875300C93869 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -118,8 +121,17 @@
 				B71B12353024875000C93869 /* JapaneseAnalysis */,
 				B71B12473024875400C93869 /* JapaneseAnalysisTests */,
 				B71B12513024875400C93869 /* JapaneseAnalysisUITests */,
+				B71B13253024876400C938A5 /* Config */,
 				B71B12343024875000C93869 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		B71B13253024876400C938A5 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				B71B13243024876400C938A4 /* AIConfig.xcconfig */,
+			);
+			path = Config;
 			sourceTree = "<group>";
 		};
 		B71B12343024875000C93869 /* Products */ = {
@@ -193,6 +205,7 @@
 				B71B131D3024876400C9389D /* KeychainService.swift */,
 				B71B131F3024876400C9389F /* AuthService.swift */,
 				B71B13213024876400C938A1 /* AICommerceService.swift */,
+				B71B13233024876400C938A3 /* AIServiceConfig.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -380,6 +393,7 @@
 				B71B131C3024876400C9389C /* KeychainService.swift in Sources */,
 				B71B131E3024876400C9389E /* AuthService.swift in Sources */,
 				B71B13203024876400C938A0 /* AICommerceService.swift in Sources */,
+				B71B13223024876400C938A2 /* AIServiceConfig.swift in Sources */,
 				B71B12373024875000C93869 /* JapaneseAnalysisApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -533,8 +547,12 @@
 		};
 		B71B12593024875400C93869 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B71B13243024876400C938A4 /* AIConfig.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_KEY_AI_API_KEY = "$(AI_API_KEY)";
+				INFOPLIST_KEY_AI_BASE_URL = "$(AI_BASE_URL)";
+				INFOPLIST_KEY_AI_MODEL = "$(AI_MODEL)";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = JapaneseAnalysis/JapaneseAnalysis.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -569,8 +587,12 @@
 		};
 		B71B125A3024875400C93869 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B71B13243024876400C938A4 /* AIConfig.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_KEY_AI_API_KEY = "$(AI_API_KEY)";
+				INFOPLIST_KEY_AI_BASE_URL = "$(AI_BASE_URL)";
+				INFOPLIST_KEY_AI_MODEL = "$(AI_MODEL)";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = JapaneseAnalysis/JapaneseAnalysis.entitlements;
 				CODE_SIGN_STYLE = Automatic;

@@ -27,6 +27,8 @@ final class KeychainService {
         case memberId
         case memberEmail
         case memberDisplayName
+        /// 直连第三方 AI 的 API Key（运行时由用户或服务端写入）
+        case apiKey
     }
 
     // MARK: - 保存
@@ -132,6 +134,15 @@ final class KeychainService {
         set {
             if let newValue { set(newValue, for: .memberDisplayName) }
             else { delete(.memberDisplayName) }
+        }
+    }
+
+    /// 直连第三方 AI 的 API Key
+    var apiKey: String? {
+        get { get(.apiKey) }
+        set {
+            if let newValue { set(newValue, for: .apiKey) }
+            else { delete(.apiKey) }
         }
     }
 }

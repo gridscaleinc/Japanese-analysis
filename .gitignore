@@ -21,3 +21,6 @@ fastlane/test_output
 # Environment / secrets
 .env
 .env.*
+
+# AI 接口本地密钥配置（含真实 API Key，禁止提交）
+Config/AIConfig.local.xcconfig
