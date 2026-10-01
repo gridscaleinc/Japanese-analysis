@@ -1,8 +1,8 @@
 // 复制本文件为 AIConfig.local.xcconfig 并填入真实值。
-// AIConfig.local.xcconfig 已被 .gitignore 忽略，不会被提交到仓库。
+// AIConfig.local.xcconfig 已被 .gitignore 忽略，不会被提交到仓库。.....
 //
 // 获取方式（DeepSeek）：https://platform.deepseek.com/api_keys
 
-AI_API_KEY  = sk-545d3df34f0a44e29357537b4366445c
+AI_API_KEY  = 
 AI_BASE_URL = https://api.deepseek.com
 AI_MODEL = deepseek-flash
